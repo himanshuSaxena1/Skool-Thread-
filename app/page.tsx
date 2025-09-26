@@ -3,32 +3,22 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  StarIcon,
   ShieldCheckIcon,
   TruckIcon,
   RefreshCwIcon,
   UsersIcon,
-  PhoneIcon,
-  MailIcon,
-  MapPinIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CheckIcon,
-  SparklesIcon,
   AwardIcon,
-  HeartIcon,
   MenuIcon,
   XIcon,
-  EyeIcon,
-  ZoomInIcon,
-  ArrowRightIcon,
+  CheckIcon,
 } from "lucide-react"
 import { useState, useEffect } from "react"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -50,7 +40,7 @@ const productCategories = {
       name: "Classic White Shirt",
       price: "$24.99",
       originalPrice: "$29.99",
-      images: ["/placeholder-n7et2.png", "/placeholder-ko2n1.png", "/placeholder-nteg3.png"],
+      images: ["/shirt-1.jpg", "/shirt-2.jpg", "/shirt-3.jpg"],
       features: ["100% Cotton", "Easy Care", "Wrinkle Resistant", "Reinforced Collar", "Machine Washable"],
       rating: 4.8,
       reviews: 124,
@@ -62,7 +52,7 @@ const productCategories = {
       name: "Polo Shirt - Navy",
       price: "$22.99",
       originalPrice: "$27.99",
-      images: ["/placeholder-ko2n1.png", "/placeholder-n7et2.png", "/placeholder-bypnh.png"],
+      images: ["/shirt-2.jpg", "/placeholder-n7et2.png", "/placeholder-bypnh.png"],
       features: ["Moisture Wicking", "Stain Resistant", "UV Protection", "Breathable Fabric", "Color Fast"],
       rating: 4.9,
       reviews: 89,
@@ -74,7 +64,7 @@ const productCategories = {
       name: "Oxford Button-Down",
       price: "$28.99",
       originalPrice: "$34.99",
-      images: ["/placeholder-nteg3.png", "/placeholder-qpsa5.png", "/placeholder-r34st.png"],
+      images: ["/shirt-3.jpg", "/placeholder-qpsa5.png", "/placeholder-r34st.png"],
       features: ["Premium Cotton", "Reinforced Seams", "Classic Fit", "Button-Down Collar", "Chest Pocket"],
       rating: 4.7,
       reviews: 156,
@@ -88,7 +78,7 @@ const productCategories = {
       name: "Classic Chinos",
       price: "$32.99",
       originalPrice: "$39.99",
-      images: ["/placeholder-qpsa5.png", "/placeholder-r34st.png", "/placeholder-u00nt.png"],
+      images: ["/pant-1.jpg", "/placeholder-r34st.png", "/placeholder-u00nt.png"],
       features: ["Stretch Fabric", "Reinforced Knees", "Adjustable Waist", "Stain Resistant", "Wrinkle Free"],
       rating: 4.8,
       reviews: 203,
@@ -100,7 +90,7 @@ const productCategories = {
       name: "Pleated Trousers",
       price: "$29.99",
       originalPrice: "$35.99",
-      images: ["/placeholder-r34st.png", "/placeholder-qpsa5.png", "/placeholder-6fp0g.png"],
+      images: ["/pant-2.jpg", "/placeholder-qpsa5.png", "/placeholder-6fp0g.png"],
       features: ["Wrinkle Free", "Machine Washable", "Classic Fit", "Belt Loops", "Side Pockets"],
       rating: 4.6,
       reviews: 178,
@@ -112,7 +102,7 @@ const productCategories = {
       name: "Cargo Pants",
       price: "$34.99",
       originalPrice: "$42.99",
-      images: ["/placeholder-u00nt.png", "/placeholder-bypnh.png", "/placeholder-qlehi.png"],
+      images: ["/pant-3.jpg", "/placeholder-bypnh.png", "/placeholder-qlehi.png"],
       features: ["Multiple Pockets", "Durable Fabric", "Comfort Fit", "Reinforced Stitching", "Easy Care"],
       rating: 4.7,
       reviews: 92,
@@ -126,7 +116,7 @@ const productCategories = {
       name: "V-Neck Sweater",
       price: "$38.99",
       originalPrice: "$45.99",
-      images: ["/placeholder-bypnh.png", "/placeholder-6fp0g.png", "/placeholder-qlehi.png"],
+      images: ["/sweater-1.jpg", "/placeholder-6fp0g.png", "/placeholder-qlehi.png"],
       features: ["100% Wool", "Machine Washable", "Pill Resistant", "Classic V-Neck", "Ribbed Trim"],
       rating: 4.9,
       reviews: 167,
@@ -138,7 +128,7 @@ const productCategories = {
       name: "Cardigan Sweater",
       price: "$42.99",
       originalPrice: "$49.99",
-      images: ["/placeholder-6fp0g.png", "/placeholder-bypnh.png", "/placeholder-n7et2.png"],
+      images: ["/sweater-2.jpg", "/placeholder-bypnh.png", "/placeholder-n7et2.png"],
       features: ["Button Front", "Soft Knit", "Easy Care", "Two Pockets", "Ribbed Cuffs"],
       rating: 4.8,
       reviews: 134,
@@ -147,16 +137,92 @@ const productCategories = {
       description: "Comfortable cardigan with button front closure and soft knit construction.",
     },
     {
-      name: "Pullover Hoodie",
+      name: "Sweater",
       price: "$35.99",
       originalPrice: "$42.99",
-      images: ["/placeholder-qlehi.png", "/placeholder-u00nt.png", "/placeholder-ko2n1.png"],
+      images: ["/sweater-3.jpg", "/placeholder-u00nt.png", "/placeholder-ko2n1.png"],
       features: ["Cotton Blend", "Kangaroo Pocket", "Drawstring Hood", "Ribbed Cuffs", "Soft Interior"],
       rating: 4.7,
       reviews: 211,
       sizes: ["XS", "S", "M", "L", "XL", "XXL"],
       colors: ["Navy", "Gray", "Black", "Maroon"],
       description: "Cozy pullover hoodie with kangaroo pocket and soft cotton blend fabric.",
+    },
+  ],
+  ties: [
+    {
+      name: "Striped School Tie",
+      price: "$14.99",
+      originalPrice: "$19.99",
+      images: ["/tie-1.jpg", "/placeholder-n7et2.png"],
+      features: ["100% Polyester", "Pre-Tied", "Adjustable Length", "Durable Fabric", "Easy Care"],
+      rating: 4.8,
+      reviews: 89,
+      sizes: ["One Size"],
+      colors: ["Navy/Red", "Navy/Gold", "Black/Gray"],
+      description: "Classic striped school tie in durable polyester fabric, pre-tied for convenience.",
+    },
+    {
+      name: "Solid Color Tie",
+      price: "$12.99",
+      originalPrice: "$16.99",
+      images: ["/tie-2.jpg", "/placeholder-qpsa5.png"],
+      features: ["100% Polyester", "Pre-Tied", "Adjustable Length", "Stain Resistant", "Easy Care"],
+      rating: 4.7,
+      reviews: 76,
+      sizes: ["One Size"],
+      colors: ["Navy", "Black", "Gray", "Burgundy"],
+      description: "Sleek solid color tie in stain-resistant polyester, perfect for any school uniform.",
+    },
+    {
+      name: "Patterned Tie",
+      price: "$15.99",
+      originalPrice: "$20.99",
+      images: ["/tie-3.jpg", "/placeholder-nteg3.png"],
+      features: ["100% Polyester", "Pre-Tied", "Adjustable Length", "Unique Patterns", "Easy Care"],
+      rating: 4.9,
+      reviews: 54,
+      sizes: ["One Size"],
+      colors: ["Navy/White", "Black/Red", "Gray/Blue"],
+      description: "Eye-catching patterned tie in durable polyester, pre-tied for easy wear.",
+    },
+  ],
+  shoes: [
+    {
+      name: "Classic Black Dress Shoes",
+      price: "$49.99",
+      originalPrice: "$59.99",
+      images: ["/shoes-1.jpg", "/placeholder-qlehi.png"],
+      features: ["Genuine Leather", "Non-Slip Sole", "Cushioned Insole", "Durable Construction", "Easy Care"],
+      rating: 4.8,
+      reviews: 145,
+      sizes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      colors: ["Black", "Brown"],
+      description: "Timeless black dress shoes made from genuine leather with a non-slip sole for safety.",
+    },
+    {
+      name: "Navy Blue Loafers",
+      price: "$44.99",
+      originalPrice: "$54.99",
+      images: ["/shoes-2.jpg", "/placeholder-u00nt.png"],
+      features: ["Synthetic Leather", "Slip-On Design", "Cushioned Insole", "Lightweight", "Easy Care"],
+      rating: 4.7,
+      reviews: 98,
+      sizes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      colors: ["Navy", "Black", "Brown"],
+      description: "Comfortable navy blue loafers with a slip-on design and cushioned insole for all-day wear.",
+    },
+    {
+      name: "White Athletic Shoes",
+      price: "$39.99",
+      originalPrice: "$49.99",
+      images: ["/shoes-3.jpg", "/placeholder-6fp0g.png"],
+      features: ["Breathable Mesh", "Non-Slip Sole", "Lightweight", "Cushioned Insole", "Easy Care"],
+      rating: 4.9,
+      reviews: 123,
+      sizes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      colors: ["White", "Black", "Gray"],
+      description: "Versatile white athletic shoes with breathable mesh and a non-slip sole for active students.",
     },
   ],
 }
@@ -188,46 +254,49 @@ const benefits = [
   },
 ]
 
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    role: "Parent",
-    content: "Excellent quality uniforms that last the entire school year. My daughter loves how comfortable they are!",
-    rating: 5,
-    image: "/smiling-parent-woman.jpg",
-  },
-  {
-    name: "Michael Chen",
-    role: "School Administrator",
-    content: "We've been ordering from Skool Threads for 3 years. Consistent quality and reliable service every time.",
-    rating: 5,
-    image: "/placeholder-i7bbo.png",
-  },
-  {
-    name: "Emma Davis",
-    role: "Parent",
-    content: "The sizing guide was so helpful! Perfect fit on the first order. Great customer service too.",
-    rating: 5,
-    image: "/placeholder-npl4v.png",
-  },
-]
-
 const navItems = [
-  { name: "Products", href: "#products" },
   { name: "Benefits", href: "#benefits" },
   { name: "Sizing", href: "#sizing" },
-  { name: "Testimonials", href: "#testimonials" },
   { name: "About", href: "#about" },
   { name: "Contact", href: "#contact" },
 ]
 
+const uniformTabOptions = [
+  { label: "Shirts", value: "shirts" },
+  { label: "Pants", value: "pants" },
+  { label: "Sweaters", value: "sweaters" },
+  { label: "Ties", value: "ties" },
+  { label: "Shoes", value: "shoes" },
+]
+
+const heroBackgrounds = [
+  {
+    image: "/bg-1.jpg",
+    title: "Premium School Uniforms",
+    subtitle: "Quality that lasts, comfort that matters",
+  },
+  {
+    image: "/bg-2.jpg",
+    title: "Durable School Trousers",
+    subtitle: "Step into comfort and style",
+  },
+  {
+    image: "/bg-3.jpg",
+    title: "Complete Accessories",
+    subtitle: "Everything you need for school",
+  },
+  {
+    image: "/bg-4.jpg",
+    title: "Quality Stationery",
+    subtitle: "Tools for academic success",
+  },
+]
+
 export default function SkoolThreadsLanding() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [activeTab, setActiveTab] = useState("shirts")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -237,12 +306,24 @@ export default function SkoolThreadsLanding() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroSlide((prev) => (prev + 1) % heroBackgrounds.length)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const nextHeroSlide = () => {
+    setCurrentHeroSlide((prev) => (prev + 1) % heroBackgrounds.length)
   }
 
-  const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  const prevHeroSlide = () => {
+    setCurrentHeroSlide((prev) => (prev - 1 + heroBackgrounds.length) % heroBackgrounds.length)
+  }
+
+  const goToHeroSlide = (index: number) => {
+    setCurrentHeroSlide(index)
   }
 
   const scrollToSection = (href: string) => {
@@ -253,12 +334,18 @@ export default function SkoolThreadsLanding() {
     setMobileMenuOpen(false)
   }
 
+  const gotoTab = (tab: string) => {
+    const section = document.querySelector("#products")
+    if (section) section.scrollIntoView({ behavior: "smooth" })
+    window.setTimeout(() => setActiveTab(tab), 500) // activate after scroll starts
+    setMobileMenuOpen(false)
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-background/95 backdrop-blur-md shadow-lg" : "bg-background/80 backdrop-blur-sm shadow-sm"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/95 backdrop-blur-md shadow-lg" : "bg-background/80 backdrop-blur-sm shadow-sm"
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -267,14 +354,41 @@ export default function SkoolThreadsLanding() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-2"
             >
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">ST</span>
+              <div className="w-14 h-14 bg-transparent rounded-lg flex items-center justify-center">
+                <Image src="/skool_thread_logo.png" alt="Skool Threads" width={48} height={48} />
               </div>
               <span className="text-xl font-bold text-foreground transition-colors">Skool Threads</span>
             </motion.div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-6">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="text-foreground hover:text-primary font-medium focus:outline-none flex items-center gap-1">
+                  School Uniforms
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-chevron-down-icon lucide-chevron-down"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-40">
+                  {uniformTabOptions.map((opt) => (
+                    <DropdownMenuItem key={opt.value} className="font-bold" onClick={() => gotoTab(opt.value)}>
+                      {opt.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {navItems.map((item, index) => (
                 <motion.button
                   key={item.name}
@@ -287,8 +401,11 @@ export default function SkoolThreadsLanding() {
                   {item.name}
                 </motion.button>
               ))}
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 shadow-sm">
-                Shop Now
+              <Button
+                onClick={() => gotoTab("shirts")}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 shadow-sm"
+              >
+                Browse Uniforms
               </Button>
             </div>
 
@@ -311,6 +428,19 @@ export default function SkoolThreadsLanding() {
               className="md:hidden bg-background/95 backdrop-blur-md border-t"
             >
               <div className="py-4 space-y-2">
+                <div className="px-4 py-2 text-xs uppercase tracking-wide text-muted-foreground">School Uniforms</div>
+                <div className="grid grid-cols-3 gap-2 px-4">
+                  {uniformTabOptions.map((opt) => (
+                    <Button
+                      key={opt.value}
+                      variant="secondary"
+                      className="bg-secondary"
+                      onClick={() => gotoTab(opt.value)}
+                    >
+                      {opt.label}
+                    </Button>
+                  ))}
+                </div>
                 {navItems.map((item) => (
                   <button
                     key={item.name}
@@ -320,11 +450,6 @@ export default function SkoolThreadsLanding() {
                     {item.name}
                   </button>
                 ))}
-                <div className="px-4 pt-2">
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
-                    Shop Now
-                  </Button>
-                </div>
               </div>
             </motion.div>
           )}
@@ -332,174 +457,99 @@ export default function SkoolThreadsLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section
-        id="home"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/10 via-background to-primary/5"
-      >
+      <section id="home" className="relative min-h-[80vh] md:min-h-screen flex items-center overflow-hidden">
+        {/* Background Images Slider */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10"></div>
-          <div className="absolute top-0 left-0 w-full h-full">
-            <svg className="w-full h-full opacity-10" viewBox="0 0 1200 800" fill="none">
-              <defs>
-                <pattern id="geometric" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                  <polygon points="50,0 100,50 50,100 0,50" fill="currentColor" className="text-primary/30" />
-                  <polygon points="25,25 75,25 75,75 25,75" fill="currentColor" className="text-accent/20" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#geometric)" />
-            </svg>
-          </div>
-          {/* Floating geometric shapes */}
-          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-32 h-32 bg-accent/20 rotate-45 blur-2xl animate-bounce"></div>
-          <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-primary/30 rounded-full blur-lg animate-pulse delay-1000"></div>
+          {heroBackgrounds.map((bg, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${index === currentHeroSlide ? "opacity-100" : "opacity-0"
+                }`}
+              style={{
+                backgroundImage: `url('${bg.image}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 bg-black/30" />
+
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevHeroSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-background/20 hover:bg-background/40 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
+          aria-label="Previous slide"
+        >
+          <ChevronLeftIcon className="w-6 h-6 text-black group-hover:text-primary transition-colors" />
+        </button>
+
+        <button
+          onClick={nextHeroSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-background/20 hover:bg-background/40 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
+          aria-label="Next slide"
+        >
+          <ChevronRightIcon className="w-6 h-6 text-black group-hover:text-primary transition-colors" />
+        </button>
+
+        {/* Slide Indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {heroBackgrounds.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToHeroSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentHeroSlide ? "bg-primary scale-125" : "bg-white/50 hover:bg-white/80"
+                }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center lg:text-left space-y-8"
+          <div className="max-w-2xl space-y-6">
+            <div className="inline-flex items-center gap-2 bg-primary/15 border border-primary/20 text-primary px-5 py-2 rounded-full text-sm font-semibold">
+              Trusted by 500+ Schools
+            </div>
+            <motion.h1
+              key={currentHeroSlide}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-6xl font-black leading-tight text-balance"
             >
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="inline-flex items-center gap-2 bg-primary/15 backdrop-blur-sm border border-primary/20 text-primary px-6 py-3 rounded-full text-sm font-semibold"
-              >
-                <SparklesIcon className="w-4 h-4" />
-                #1 Choice for 500+ Schools
-              </motion.div>
-
-              {/* Main Heading - Gen Z Style */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="space-y-4"
-              >
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-balance">
-                  <span className="block text-primary">SKOOL</span>
-                  <span className="block text-foreground">THREADS</span>
-                  <span className="block text-2xl md:text-3xl lg:text-4xl font-bold text-muted-foreground mt-2">
-                    Where Style Meets School
-                  </span>
-                </h1>
-              </motion.div>
-
-              {/* Description */}
-              <motion.p
-                className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                Premium uniforms designed for the modern student. Comfort meets style in every thread, trusted by
-                students, parents, and schools nationwide.
-              </motion.p>
-
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4"
-              >
-                <Button
-                  size="lg"
-                  onClick={() => scrollToSection("#products")}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/25"
-                >
-                  Shop Collection
-                  <ArrowRightIcon className="w-5 h-5 ml-2" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => scrollToSection("#products")}
-                  className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105"
-                >
-                  View Catalog
-                </Button>
-              </motion.div>
-
-              {/* Social Proof */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex flex-col sm:flex-row items-center gap-6 pt-4"
-              >
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                  <span className="ml-2 text-sm font-medium text-muted-foreground">4.9/5 from 2,000+ reviews</span>
-                </div>
-                <div className="text-sm text-muted-foreground font-medium">50,000+ Happy Students</div>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative"
+              Online Store for
+              <span className="block text-gradient">{heroBackgrounds[currentHeroSlide].title}</span>& Much More
+            </motion.h1>
+            <motion.p
+              key={`subtitle-${currentHeroSlide}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg md:text-xl text-white/90"
             >
-              {/* Main Image Container */}
-              <div className="relative">
-                {/* Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent/30 rounded-3xl blur-3xl scale-110"></div>
-
-                {/* Main Image */}
-                <div className="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-2xl border border-primary/10">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-X5j6OHJPon35M8w5EBsKd3KRpC18Yo.png"
-                    alt="Students in school uniforms"
-                    className="w-full h-auto rounded-2xl"
-                  />
-
-                  {/* Floating Cards */}
-                  <div className="absolute -top-4 -left-4 bg-white rounded-2xl p-4 shadow-xl border border-primary/10">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-semibold text-gray-700">Premium Quality</span>
-                    </div>
-                  </div>
-
-                  <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground rounded-2xl p-4 shadow-xl">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold">500+</div>
-                      <div className="text-xs opacity-90">Schools Trust Us</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Decorative Elements */}
-                <div className="absolute -z-10 top-10 right-10 w-20 h-20 bg-primary/20 rounded-full blur-2xl animate-pulse"></div>
-                <div className="absolute -z-10 bottom-10 left-10 w-16 h-16 bg-accent/20 rounded-full blur-xl animate-bounce delay-500"></div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <span className="text-sm font-medium">Scroll to explore</span>
-            <div className="w-6 h-10 border-2 border-primary/30 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-bounce"></div>
+              {heroBackgrounds[currentHeroSlide].subtitle} - Premium schoolwear that blends comfort, durability, and
+              modern style.
+            </motion.p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                onClick={() => gotoTab("shirts")}
+                className="bg-primary text-primary-foreground px-8 py-4 rounded-xl"
+              >
+                Explore Collection
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => scrollToSection("#contact")}
+                className="border-2 border-primary text-primary px-8 py-4 rounded-xl"
+              >
+                Contact Us
+              </Button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <section id="products" className="py-24 bg-background">
@@ -509,13 +559,13 @@ export default function SkoolThreadsLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8"
           >
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
               <AwardIcon className="w-4 h-4" />
               Premium Collection
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">Our Uniform Collection</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Our Uniform Collection</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Discover our comprehensive range of school uniforms, designed with quality materials and attention to
               detail. Each piece is crafted for comfort, durability, and style.
@@ -529,7 +579,7 @@ export default function SkoolThreadsLanding() {
             viewport={{ once: true }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12 h-14 bg-muted/50 p-1">
+              <TabsList className="grid w-full max-w-md mx-auto grid-cols-5 gap-2 mb-8 h-14 bg-muted/50 p-1">
                 <TabsTrigger
                   value="shirts"
                   className="text-base font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
@@ -547,6 +597,18 @@ export default function SkoolThreadsLanding() {
                   className="text-base font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
                 >
                   Sweaters
+                </TabsTrigger>
+                <TabsTrigger
+                  value="ties"
+                  className="text-base font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
+                >
+                  Ties
+                </TabsTrigger>
+                <TabsTrigger
+                  value="shoes"
+                  className="text-base font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
+                >
+                  Shoes
                 </TabsTrigger>
               </TabsList>
 
@@ -571,136 +633,13 @@ export default function SkoolThreadsLanding() {
                               <img
                                 src={product.images[0] || "/placeholder.svg"}
                                 alt={product.name}
-                                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                                className=" w-48 md:w-72 mx-auto h-80 md:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
                               />
-                              <div className="absolute top-4 left-4">
-                                <Badge className="bg-red-500 text-white font-semibold">
-                                  Save{" "}
-                                  {Math.round(
-                                    ((Number.parseFloat(product.originalPrice.slice(1)) -
-                                      Number.parseFloat(product.price.slice(1))) /
-                                      Number.parseFloat(product.originalPrice.slice(1))) *
-                                      100,
-                                  )}
-                                  %
-                                </Badge>
-                              </div>
-                              <div className="absolute top-4 right-4">
-                                <Button
-                                  size="sm"
-                                  variant="secondary"
-                                  className="rounded-full w-10 h-10 p-0 bg-white/90 hover:bg-white shadow-lg"
-                                >
-                                  <HeartIcon className="w-4 h-4" />
-                                </Button>
-                              </div>
-                              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1">
-                                {product.images.map((_, imgIndex) => (
-                                  <div
-                                    key={imgIndex}
-                                    className="w-2 h-2 rounded-full bg-white/60 hover:bg-white transition-colors cursor-pointer"
-                                  />
-                                ))}
-                              </div>
                             </div>
-                            <div className="p-6">
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="flex items-center gap-1">
-                                  {[...Array(5)].map((_, i) => (
-                                    <StarIcon
-                                      key={i}
-                                      className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                                    />
-                                  ))}
-                                </div>
-                                <span className="text-sm text-muted-foreground">
-                                  {product.rating} ({product.reviews} reviews)
-                                </span>
-                              </div>
-                              <h3 className="font-bold text-xl mb-2 group-hover:text-primary transition-colors">
+                            <div className="p-4">
+                              <h3 className="font-semibold text-lg text-center group-hover:text-primary transition-colors">
                                 {product.name}
                               </h3>
-                              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{product.description}</p>
-                              <div className="flex items-center gap-2 mb-4">
-                                <span className="text-2xl font-bold text-primary">{product.price}</span>
-                                <span className="text-lg text-muted-foreground line-through">
-                                  {product.originalPrice}
-                                </span>
-                              </div>
-
-                              <div className="mb-4">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className="text-sm font-medium">Sizes:</span>
-                                  <div className="flex gap-1">
-                                    {product.sizes.slice(0, 4).map((size, sizeIndex) => (
-                                      <Badge key={sizeIndex} variant="outline" className="text-xs px-2 py-1">
-                                        {size}
-                                      </Badge>
-                                    ))}
-                                    {product.sizes.length > 4 && (
-                                      <Badge variant="outline" className="text-xs px-2 py-1">
-                                        +{product.sizes.length - 4}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm font-medium">Colors:</span>
-                                  <div className="flex gap-1">
-                                    {product.colors.slice(0, 3).map((color, colorIndex) => (
-                                      <div
-                                        key={colorIndex}
-                                        className="w-4 h-4 rounded-full border-2 border-gray-300"
-                                        style={{
-                                          backgroundColor:
-                                            color.toLowerCase() === "white"
-                                              ? "#ffffff"
-                                              : color.toLowerCase() === "navy"
-                                                ? "#1e3a8a"
-                                                : color.toLowerCase() === "black"
-                                                  ? "#000000"
-                                                  : color.toLowerCase() === "gray"
-                                                    ? "#6b7280"
-                                                    : color.toLowerCase() === "khaki"
-                                                      ? "#c19a6b"
-                                                      : color.toLowerCase() === "light blue"
-                                                        ? "#93c5fd"
-                                                        : "#6b7280",
-                                        }}
-                                        title={color}
-                                      />
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="space-y-2 mb-6">
-                                {product.features.slice(0, 3).map((feature, featureIndex) => (
-                                  <div
-                                    key={featureIndex}
-                                    className="flex items-center gap-2 text-sm text-muted-foreground"
-                                  >
-                                    <CheckIcon className="w-4 h-4 text-primary" />
-                                    {feature}
-                                  </div>
-                                ))}
-                                {product.features.length > 3 && (
-                                  <div className="text-sm text-primary font-medium">
-                                    +{product.features.length - 3} more features
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex gap-2">
-                                <Button className="flex-1 gradient-primary hover:shadow-lg hover:shadow-primary/25 text-primary-foreground transition-all duration-300">
-                                  View Details
-                                </Button>
-                                <Button variant="outline" size="sm" className="px-3 bg-transparent">
-                                  <EyeIcon className="w-4 h-4" />
-                                </Button>
-                                <Button variant="outline" size="sm" className="px-3 bg-transparent">
-                                  <ZoomInIcon className="w-4 h-4" />
-                                </Button>
-                              </div>
                             </div>
                           </CardContent>
                         </Card>
@@ -798,9 +737,6 @@ export default function SkoolThreadsLanding() {
                   </motion.div>
                 ))}
               </div>
-              <Button className="gradient-primary hover:shadow-lg hover:shadow-primary/25 text-primary-foreground px-8 py-4 text-lg font-semibold">
-                View Sizing Guide
-              </Button>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -810,90 +746,14 @@ export default function SkoolThreadsLanding() {
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-3xl"></div>
-              <img
+              <Image
+                width={600}
+                height={400}
                 src="/sizing-guide-chart-measurements.jpg"
                 alt="Sizing Guide"
                 className="relative rounded-3xl shadow-2xl w-full hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section id="testimonials" className="py-20 bg-card">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2
-              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-              style={{ fontFamily: "var(--font-montserrat)" }}
-            >
-              What Our Customers Say
-            </h2>
-            <p
-              className="text-lg text-muted-foreground max-w-2xl mx-auto"
-              style={{ fontFamily: "var(--font-open-sans)" }}
-            >
-              Don't just take our word for it. Here's what parents and schools are saying about Skool Threads.
-            </p>
-          </motion.div>
-
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              key={currentTestimonial}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-              className="bg-background rounded-lg p-8 shadow-lg"
-            >
-              <div className="flex items-center mb-6">
-                <img
-                  src={testimonials[currentTestimonial].image || "/placeholder.svg"}
-                  alt={testimonials[currentTestimonial].name}
-                  className="w-16 h-16 rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-semibold text-lg" style={{ fontFamily: "var(--font-montserrat)" }}>
-                    {testimonials[currentTestimonial].name}
-                  </h4>
-                  <p className="text-muted-foreground">{testimonials[currentTestimonial].role}</p>
-                </div>
-              </div>
-              <div className="flex mb-4">
-                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                  <StarIcon key={i} className="w-5 h-5 fill-primary text-primary" />
-                ))}
-              </div>
-              <p className="text-lg text-foreground leading-relaxed" style={{ fontFamily: "var(--font-open-sans)" }}>
-                "{testimonials[currentTestimonial].content}"
-              </p>
-            </motion.div>
-
-            <div className="flex justify-center items-center mt-8 gap-4">
-              <Button variant="outline" size="sm" onClick={prevTestimonial} className="rounded-full bg-transparent">
-                <ChevronLeftIcon className="w-4 h-4" />
-              </Button>
-              <div className="flex gap-2">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-3 h-3 rounded-full transition-colors ${
-                      index === currentTestimonial ? "bg-primary" : "bg-muted"
-                    }`}
-                  />
-                ))}
-              </div>
-              <Button variant="outline" size="sm" onClick={nextTestimonial} className="rounded-full bg-transparent">
-                <ChevronRightIcon className="w-4 h-4" />
-              </Button>
-            </div>
           </div>
         </div>
       </section>
@@ -907,7 +767,9 @@ export default function SkoolThreadsLanding() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <img
+              <Image
+                width={600}
+                height={400}
                 src="/modern-uniform-manufacturing-facility-with-quality.jpg"
                 alt="About Skool Threads"
                 className="rounded-lg shadow-lg w-full"
@@ -919,16 +781,8 @@ export default function SkoolThreadsLanding() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2
-                className="text-3xl md:text-4xl font-bold text-foreground mb-6"
-                style={{ fontFamily: "var(--font-montserrat)" }}
-              >
-                About Skool Threads
-              </h2>
-              <p
-                className="text-lg text-muted-foreground mb-6 leading-relaxed"
-                style={{ fontFamily: "var(--font-open-sans)" }}
-              >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">About Skool Threads</h2>
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
                 Founded in 2015, Skool Threads has been dedicated to providing high-quality school uniforms that combine
                 comfort, durability, and style. We understand the importance of looking and feeling confident in school,
                 which is why we use only the finest materials and latest manufacturing techniques.
@@ -971,131 +825,63 @@ export default function SkoolThreadsLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h2
-              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-              style={{ fontFamily: "var(--font-montserrat)" }}
-            >
-              Get In Touch
-            </h2>
-            <p
-              className="text-lg text-muted-foreground max-w-2xl mx-auto"
-              style={{ fontFamily: "var(--font-open-sans)" }}
-            >
-              Have questions about our uniforms or need help with sizing? We're here to help!
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Get In Touch</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Reach us instantly via WhatsApp, phone, or email. No forms—fast responses.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <Card>
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-semibold mb-6" style={{ fontFamily: "var(--font-montserrat)" }}>
-                    Contact Information
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <PhoneIcon className="w-5 h-5 text-primary" />
-                      <span>(555) 123-4567</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MailIcon className="w-5 h-5 text-primary" />
-                      <span>info@skoolthreads.com</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPinIcon className="w-5 h-5 text-primary" />
-                      <span>123 Uniform Street, Fashion City, FC 12345</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-8">
-                    <h4 className="text-lg font-semibold mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-                      Business Hours
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Monday - Friday:</span>
-                        <span>9:00 AM - 6:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Saturday:</span>
-                        <span>10:00 AM - 4:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Sunday:</span>
-                        <span>Closed</span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <Card>
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-semibold mb-6" style={{ fontFamily: "var(--font-montserrat)" }}>
-                    Send us a Message
-                  </h3>
-                  <form className="space-y-4">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.1 }}
-                      viewport={{ once: true }}
-                    >
-                      <Input placeholder="Your Name" className="w-full" />
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.2 }}
-                      viewport={{ once: true }}
-                    >
-                      <Input placeholder="Your Email" type="email" className="w-full" />
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.3 }}
-                      viewport={{ once: true }}
-                    >
-                      <Input placeholder="Subject" className="w-full" />
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.4 }}
-                      viewport={{ once: true }}
-                    >
-                      <Textarea placeholder="Your Message" rows={4} className="w-full" />
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.5 }}
-                      viewport={{ once: true }}
-                    >
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                        Send Message
-                      </Button>
-                    </motion.div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <Card className="text-center">
+              <CardContent className="p-8">
+                <img src="/whatsapp-icon.png" alt="" className="mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">WhatsApp</h3>
+                <a
+                  href="https://wa.me/15551234567"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary font-medium hover:underline"
+                >
+                  Chat on WhatsApp
+                </a>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-8">
+                <img src="/simple-phone-icon.png" alt="" className="mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Phone</h3>
+                <a href="tel:+15551234567" className="text-primary font-medium hover:underline">
+                  +1 (555) 123-4567
+                </a>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-8">
+                <img src="/email-icon.png" alt="" className="mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Email</h3>
+                <a href="mailto:info@skoolthreads.com" className="text-primary font-medium hover:underline">
+                  info@skoolthreads.com
+                </a>
+              </CardContent>
+            </Card>
           </div>
+        </div>
+      </section>
+
+      <section id="faq" className="container mx-auto py-20 bg-muted/50 w-full">
+        <h1 className="text-4xl font-bold mb-4 text-center">Find us</h1>
+        <div className="mapouter px-4 w-full h-[350px] md:h-[450px]">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d19285.19433772497!2d79.3957946!3d28.3439025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sWZ%20B-63%20Street%20no.8%2C%20Sant%20garh%2C%20Near%20tilak%20nagar%2C%20New%20Delhi%20Pincode-110018!5e0!3m2!1sen!2sin!4v1758108993924!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </section>
 
@@ -1104,10 +890,8 @@ export default function SkoolThreadsLanding() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-                Skool Threads
-              </h3>
-              <p className="text-sm opacity-80 leading-relaxed" style={{ fontFamily: "var(--font-open-sans)" }}>
+              <h3 className="text-xl font-bold mb-4">Skool Threads</h3>
+              <p className="text-sm opacity-80 leading-relaxed">
                 Quality school uniforms designed for comfort, durability, and style. Trusted by parents and schools
                 nationwide.
               </p>
@@ -1116,75 +900,85 @@ export default function SkoolThreadsLanding() {
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <button onClick={() => scrollToSection("#products")} className="hover:text-primary transition-colors">
                     Shop All
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <button onClick={() => scrollToSection("#sizing")} className="hover:text-primary transition-colors">
                     Sizing Guide
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <button onClick={() => scrollToSection("#about")} className="hover:text-primary transition-colors">
                     About Us
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <button onClick={() => scrollToSection("#contact")} className="hover:text-primary transition-colors">
                     Contact
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Customer Service</h4>
+              <h4 className="font-semibold mb-4">Product Categories</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Returns & Exchanges
-                  </a>
+                  <button onClick={() => gotoTab("shirts")} className="hover:text-primary transition-colors">
+                    Shirts & Polos
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Shipping Info
-                  </a>
+                  <button onClick={() => gotoTab("pants")} className="hover:text-primary transition-colors">
+                    Pants & Trousers
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    FAQ
-                  </a>
+                  <button onClick={() => gotoTab("sweaters")} className="hover:text-primary transition-colors">
+                    Sweaters & Hoodies
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Size Chart
-                  </a>
+                  <button onClick={() => gotoTab("shoes")} className="hover:text-primary transition-colors">
+                    School Shoes
+                  </button>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
+              <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Privacy Policy
+                  <a
+                    href="https://wa.me/15551234567"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary transition-colors"
+                  >
+                    WhatsApp Support
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Terms of Service
+                  <a href="tel:+15551234567" className="hover:text-primary transition-colors">
+                    Call Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Cookie Policy
+                  <a href="mailto:info@skoolthreads.com" className="hover:text-primary transition-colors">
+                    Email Support
                   </a>
+                </li>
+                <li>
+                  <button onClick={() => scrollToSection("#faq")} className="hover:text-primary transition-colors">
+                    Visit Store
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-secondary-foreground/20 mt-8 pt-8 text-center">
-            <p className="text-sm opacity-80">© 2024 Skool Threads. All rights reserved.</p>
+            <p className="text-sm opacity-80">© 2025 Skool Threads. All rights reserved.</p>
           </div>
         </div>
       </footer>
